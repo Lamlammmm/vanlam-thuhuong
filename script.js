@@ -126,46 +126,100 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
+const attendanceForm = document.querySelector("#attendance-form");
+if (attendanceForm) {
+  const attendanceRadios = [...attendanceForm.elements.attendance];
+  const guestCount = attendanceForm.elements.guests;
+  const guestField = attendanceForm.querySelector(".attendance-guests");
+  const attendanceStatus = document.querySelector("#attendance-status");
+
+  function updateGuestCountVisibility() {
+    const attending = attendanceForm.elements.attendance.value === "attending";
+    guestField.classList.toggle("is-hidden", !attending);
+    guestCount.required = attending;
+    guestCount.disabled = !attending;
+  }
+
+  attendanceRadios.forEach((radio) => radio.addEventListener("change", updateGuestCountVisibility));
+  updateGuestCountVisibility();
+
+  attendanceForm.addEventListener("submit", (event) => {
+    event.preventDefault();
+    if (!attendanceForm.reportValidity()) return;
+
+    const response = {
+      name: attendanceForm.elements.name.value.trim(),
+      attendance: attendanceForm.elements.attendance.value,
+      guests: guestCount.disabled ? null : guestCount.value,
+    };
+
+    try {
+      localStorage.setItem("wedding-attendance-confirmation", JSON.stringify(response));
+    } catch {
+      // Form vẫn có phản hồi khi trình duyệt chặn bộ nhớ cục bộ.
+    }
+
+    attendanceStatus.textContent = response.attendance === "attending"
+      ? `Cảm ơn ${response.name}, chúng mình rất mong được đón bạn!`
+      : `Cảm ơn ${response.name} đã phản hồi. Hẹn gặp bạn vào một dịp gần nhất nhé.`;
+    attendanceForm.querySelector(".attendance-submit").blur();
+  });
+}
+
 const giftDialog = document.querySelector("#gift-dialog");
 const giftTrigger = document.querySelector(".gift-trigger");
+const giftEnvelopes = [...giftTrigger.querySelectorAll(".gift-envelope")];
+const giftCards = [...giftDialog.querySelectorAll(".gift-card")];
+let giftRevealAnimations = [];
+let giftRevealRun = 0;
+
+giftTrigger.addEventListener("click", () => {
+  const envelopeRects = giftEnvelopes.map((envelope) => envelope.getBoundingClientRect());
+  giftDialog.showModal();
+  giftTrigger.setAttribute("aria-expanded", "true");
+
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches || !giftCards[0]?.animate) return;
+
+  const run = ++giftRevealRun;
+  giftDialog.classList.add("is-revealing");
+  giftRevealAnimations = giftCards.map((card, index) => {
+    const envelope = envelopeRects[index];
+    const target = card.getBoundingClientRect();
+    const dx = envelope.left + envelope.width / 2 - (target.left + target.width / 2);
+    const dy = envelope.top + envelope.height * 0.6 - (target.top + target.height / 2);
+    const scale = Math.min(0.62, envelope.width / target.width);
+
+    return card.animate([
+      { transform: `translate(${dx}px, ${dy}px) scale(${scale}) rotate(${index === 0 ? -10 : 10}deg)`, opacity: 0 },
+      { opacity: 1, offset: 0.32 },
+      { transform: "translate(0, 0) scale(1) rotate(0)", opacity: 1 }
+    ], {
+      duration: 1100,
+      delay: index * 150,
+      easing: "cubic-bezier(0.22, 0.8, 0.2, 1)",
+      fill: "backwards"
+    });
+  });
+
+  Promise.allSettled(giftRevealAnimations.map((animation) => animation.finished)).then(() => {
+    if (run === giftRevealRun) giftDialog.classList.remove("is-revealing");
+  });
+});
+giftDialog.querySelector(".dialog-close").addEventListener("click", () => giftDialog.close());
+giftDialog.addEventListener("close", () => {
+  giftRevealRun++;
+  giftRevealAnimations.forEach((animation) => animation.cancel());
+  giftRevealAnimations = [];
+  giftDialog.classList.remove("is-revealing");
+  giftTrigger.setAttribute("aria-expanded", "false");
+});
+
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector(".lightbox-image");
 const lightboxCaption = document.querySelector(".lightbox-caption");
 const lightboxCounter = document.querySelector(".lightbox-counter");
 const lightboxPrev = document.querySelector(".lightbox-arrow-prev");
 const lightboxNext = document.querySelector(".lightbox-arrow-next");
-const desiredGalleryImages = [
-  "linh1900.jpg", "linh1785.jpg", "linh2172.jpg", "linh1911.jpg", "linh1887.jpg", "linh1919.jpg",
-  "linh1831.jpg", "linh2187.jpg", "linh1394.jpg", "linh2183.jpg", "linh2010.jpg", "linh2020.jpg",
-  "linh2032.jpg", "linh1946.jpg", "linh1972.jpg", "linh2054.jpg", "linh2089.jpg", "linh2130.jpg",
-  "linh1892.jpg", "linh2093.jpg", "linh1862.jpg", "linh1876.jpg", "linh1824.jpg", "linh1839.jpg",
-  "linh1865.jpg", "linh1895.jpg", "linh1922.jpg", "linh1914.jpg", "linh1845.jpg", "linh1938.jpg",
-  "linh1877.jpg", "linh1857.jpg", "linh1920.jpg", "linh1882.jpg"
-];
-const galleryGrid = document.querySelector(".gallery-grid");
-if (galleryGrid) {
-  const existingCards = new Map([...galleryGrid.querySelectorAll(".gallery-card")].map((card) => {
-    const src = card.querySelector("img")?.dataset.src || "";
-    return [src.split("/").pop().split("?")[0].toLowerCase(), card];
-  }));
-  galleryGrid.innerHTML = "";
-  desiredGalleryImages.forEach((name, index) => {
-    const card = existingCards.get(name) || document.createElement("button");
-    card.className = "gallery-card";
-    card.type = "button";
-    card.dataset.lightbox = `assets/photos/album/${name}`;
-    card.dataset.caption = "Thu Hương & Văn Lâm";
-    const img = card.querySelector("img") || document.createElement("img");
-    img.dataset.src = `assets/photos/album/${name}`;
-    img.removeAttribute("src");
-    img.alt = `Ảnh cưới Thu Hương và Văn Lâm – ảnh ${String(index + 1).padStart(2, "0")}`;
-    img.decoding = "async";
-    const label = card.querySelector("span") || document.createElement("span");
-    label.innerHTML = `${String(index + 1).padStart(2, "0")} · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b>`;
-    card.replaceChildren(img, label);
-    galleryGrid.appendChild(card);
-  });
-}
 const galleryCards = [...document.querySelectorAll(".gallery-card")];
 let lightboxIndex = 0;
 let lightboxTouchStart = null;
@@ -199,8 +253,8 @@ function refreshThumbnails() {
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
 
-// Masonry Grid View - Hiển thị 8 ảnh đầu tiên, bấm "Xem thêm album" để bung toàn bộ ảnh
-const INITIAL_VISIBLE_COUNT = 8;
+// Ảnh nổi bật chiếm bốn ô; thêm tám ảnh để mọi hàng đều đầy khi thu gọn.
+const INITIAL_VISIBLE_COUNT = 9;
 let isGalleryExpanded = false;
 
 function setupMasonryGallery() {
