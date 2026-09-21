@@ -167,7 +167,6 @@ if (galleryGrid) {
   });
 }
 const galleryCards = [...document.querySelectorAll(".gallery-card")];
-let galleryIndex = 0;
 let lightboxIndex = 0;
 let lightboxTouchStart = null;
 const thumbnailStrip = document.querySelector(".lightbox-thumbnails");
@@ -200,50 +199,78 @@ function refreshThumbnails() {
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
 
-function updateGallery() {
+// Masonry Grid View - Hiển thị 8 ảnh đầu tiên, bấm "Xem thêm album" để bung toàn bộ ảnh
+const INITIAL_VISIBLE_COUNT = 8;
+let isGalleryExpanded = false;
+
+function setupMasonryGallery() {
   galleryCards.forEach((card, index) => {
-    const angle = ((index - galleryIndex) / galleryCards.length) * 360;
-    const state = index === galleryIndex ? "is-active" : "is-wheel";
-    const normalizedAngle = ((angle % 360) + 360) % 360;
-    const isBack = normalizedAngle > 90 && normalizedAngle < 270;
-    const frontDistance = Math.min(Math.abs(angle), 360 - Math.abs(angle));
-    const clarity = Math.max(0.18, 1 - frontDistance / 180);
-    card.classList.remove("is-active", "is-next", "is-prev", "is-far-next", "is-far-prev", "is-hidden", "is-back");
-    card.classList.add(state);
-    if (isBack) card.classList.add("is-back");
-    card.style.setProperty("--wheel-angle", `${angle}deg`);
-    card.style.setProperty("--wheel-clarity", clarity.toFixed(3));
-    card.tabIndex = 0;
-    card.setAttribute("aria-hidden", "false");
     const image = card.querySelector("img");
-    if (image.dataset.src) {
-      image.src = image.dataset.src;
-      delete image.dataset.src;
+    if (index < INITIAL_VISIBLE_COUNT) {
+      card.style.display = "";
+      if (image && image.dataset.src) {
+        image.src = image.dataset.src;
+        delete image.dataset.src;
+      }
+    } else {
+      card.style.display = "none";
     }
+
+    card.addEventListener("click", () => {
+      updateLightbox(index);
+      lightbox.showModal();
+      refreshThumbnails();
+    });
   });
+
+  const galleryCarouselContainer = document.querySelector(".gallery-carousel");
+  if (galleryCarouselContainer && galleryCards.length > INITIAL_VISIBLE_COUNT) {
+    const actionsWrapper = document.createElement("div");
+    actionsWrapper.className = "gallery-actions";
+    actionsWrapper.innerHTML = `
+      <button class="gallery-toggle-btn" type="button">
+        <span class="gallery-toggle-text">Xem thêm album (${galleryCards.length} ảnh)</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="6 9 12 15 18 9"></polyline>
+        </svg>
+      </button>
+    `;
+    galleryCarouselContainer.appendChild(actionsWrapper);
+
+    const toggleBtn = actionsWrapper.querySelector(".gallery-toggle-btn");
+    const toggleText = actionsWrapper.querySelector(".gallery-toggle-text");
+
+    toggleBtn.addEventListener("click", () => {
+      isGalleryExpanded = !isGalleryExpanded;
+      if (isGalleryExpanded) {
+        galleryCards.forEach((card) => {
+          card.style.display = "";
+          const img = card.querySelector("img");
+          if (img && img.dataset.src) {
+            img.src = img.dataset.src;
+            delete img.dataset.src;
+          }
+        });
+        toggleBtn.classList.add("is-expanded");
+        toggleText.textContent = "Thu gọn album";
+      } else {
+        galleryCards.forEach((card, index) => {
+          if (index >= INITIAL_VISIBLE_COUNT) {
+            card.style.display = "none";
+          }
+        });
+        toggleBtn.classList.remove("is-expanded");
+        toggleText.textContent = `Xem thêm album (${galleryCards.length} ảnh)`;
+        document.querySelector("#gallery")?.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+  }
 }
 
-function moveGallery(direction) {
-  galleryIndex = (galleryIndex + direction + galleryCards.length) % galleryCards.length;
-  updateGallery();
-  restartGalleryTimer();
-}
-
-let galleryTimer;
-function restartGalleryTimer() {
-  window.clearInterval(galleryTimer);
-  galleryTimer = window.setInterval(() => {
-    const bounds = galleryGrid.getBoundingClientRect();
-    if (document.hidden || lightbox.open || bounds.bottom <= 0 || bounds.top >= window.innerHeight
-      || galleryGrid.contains(document.activeElement)) return;
-    moveGallery(1);
-  }, 5000);
-}
+setupMasonryGallery();
 
 function updateLightbox(index) {
   lightboxIndex = (index + galleryCards.length) % galleryCards.length;
-  galleryIndex = lightboxIndex;
-  updateGallery();
 
   const card = galleryCards[lightboxIndex];
   const image = card.querySelector("img");
@@ -251,7 +278,7 @@ function updateLightbox(index) {
   const nextCard = galleryCards[(lightboxIndex + 1) % galleryCards.length];
 
   lightboxImage.src = card.dataset.lightbox;
-  lightboxImage.alt = image.alt;
+  lightboxImage.alt = image ? image.alt : "Ảnh cưới";
   lightboxCaption.textContent = card.dataset.caption;
   lightboxCaption.classList.toggle("couple-names", card.dataset.caption === "Thu Hương & Văn Lâm");
   lightboxCounter.textContent = `${lightboxIndex + 1} / ${galleryCards.length}`;
@@ -269,39 +296,9 @@ function moveLightbox(direction) {
   updateLightbox(lightboxIndex + direction);
 }
 
-document.querySelector(".gallery-arrow-prev").addEventListener("click", () => moveGallery(-1));
-document.querySelector(".gallery-arrow-next").addEventListener("click", () => moveGallery(1));
-updateGallery();
-restartGalleryTimer();
-lightbox.addEventListener("close", restartGalleryTimer);
-
-giftTrigger.addEventListener("click", () => {
-  giftDialog.showModal();
-  giftTrigger.setAttribute("aria-expanded", "true");
-});
-
-giftDialog.querySelector(".dialog-close").addEventListener("click", () => {
-  giftDialog.close();
-  giftTrigger.setAttribute("aria-expanded", "false");
-});
-
-galleryCards.forEach((card, index) => {
-  card.addEventListener("click", (event) => {
-    if (card.classList.contains("gallery-card") && !card.classList.contains("is-active")) {
-      event.preventDefault();
-      galleryIndex = index;
-      updateGallery();
-      restartGalleryTimer();
-      return;
-    }
-    updateLightbox(index);
-    lightbox.showModal();
-    refreshThumbnails();
-  });
-});
-
 lightboxPrev.addEventListener("click", () => moveLightbox(-1));
 lightboxNext.addEventListener("click", () => moveLightbox(1));
+
 lightbox.querySelector(".dialog-close").addEventListener("click", () => lightbox.close());
 
 lightbox.addEventListener("keydown", (event) => {
