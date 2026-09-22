@@ -141,7 +141,7 @@ const desiredGalleryImages = [
   "linh1892.jpg", "linh2093.jpg", "linh1862.jpg", "linh1876.jpg", "linh1824.jpg", "linh1839.jpg",
   "linh1865.jpg", "linh1895.jpg", "linh1922.jpg", "linh1914.jpg", "linh1845.jpg", "linh1938.jpg",
   "linh1877.jpg", "linh1857.jpg", "linh1920.jpg", "linh1882.jpg"
-];
+].map((name) => name.replace("linh", "LINH"));
 const galleryGrid = document.querySelector(".gallery-grid");
 if (galleryGrid) {
   const existingCards = new Map([...galleryGrid.querySelectorAll(".gallery-card")].map((card) => {
@@ -185,15 +185,20 @@ const thumbnailButtons = galleryCards.map((card, index) => {
   thumbnailStrip.appendChild(button);
   return button;
 });
+const thumbnailObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const image = entry.target;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    observer.unobserve(image);
+  });
+}, { root: thumbnailStrip, rootMargin: "0px 200px" });
+thumbnailButtons.forEach((button) => thumbnailObserver.observe(button.querySelector("img")));
 
 function refreshThumbnails() {
   thumbnailButtons.forEach((button, index) => {
     button.setAttribute("aria-current", String(index === lightboxIndex));
-    const image = button.querySelector("img");
-    if (image.dataset.src) {
-      image.src = image.dataset.src;
-      delete image.dataset.src;
-    }
   });
   const active = thumbnailButtons[lightboxIndex];
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
@@ -202,16 +207,22 @@ function refreshThumbnails() {
 // Masonry Grid View - Hiển thị 8 ảnh đầu tiên, bấm "Xem thêm album" để bung toàn bộ ảnh
 const INITIAL_VISIBLE_COUNT = 8;
 let isGalleryExpanded = false;
+const galleryImageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const image = entry.target;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    observer.unobserve(image);
+  });
+}, { rootMargin: "500px 0px" });
 
 function setupMasonryGallery() {
   galleryCards.forEach((card, index) => {
     const image = card.querySelector("img");
     if (index < INITIAL_VISIBLE_COUNT) {
       card.style.display = "";
-      if (image && image.dataset.src) {
-        image.src = image.dataset.src;
-        delete image.dataset.src;
-      }
+      if (image) galleryImageObserver.observe(image);
     } else {
       card.style.display = "none";
     }
@@ -246,10 +257,7 @@ function setupMasonryGallery() {
         galleryCards.forEach((card) => {
           card.style.display = "";
           const img = card.querySelector("img");
-          if (img && img.dataset.src) {
-            img.src = img.dataset.src;
-            delete img.dataset.src;
-          }
+          if (img && img.dataset.src) galleryImageObserver.observe(img);
         });
         toggleBtn.classList.add("is-expanded");
         toggleText.textContent = "Thu gọn album";
