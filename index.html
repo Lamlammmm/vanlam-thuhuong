@@ -7,7 +7,7 @@
     <meta name="description" content="Thiệp cưới trực tuyến của Thu Hương và Văn Lâm — 18.10.2026 tại Ninh Bình." />
     <title>Thiệp cưới Thu Hương &amp; Văn Lâm | 18.10.2026</title>
     <link rel="icon" href="assets/logo-hl-centered.png" />
-    <link rel="stylesheet" href="styles.css?v=blur-overlay-1" />
+    <link rel="stylesheet" href="styles.css?v=attendance-rsvp-1" />
   </head>
   <body>
     <div class="grain" aria-hidden="true"></div>
@@ -173,6 +173,46 @@
         </div>
       </section>
 
+      <section class="attendance-section reveal" id="attendance" aria-labelledby="attendance-title">
+        <div class="section-inner">
+          <div class="attendance-card">
+            <p class="section-kicker">Xác nhận tham dự</p>
+            <h2 id="attendance-title">Hẹn gặp bạn trong ngày vui</h2>
+            <p class="attendance-intro">Vui lòng cho chúng mình biết để chuẩn bị đón tiếp bạn chu đáo hơn nhé.</p>
+            <form class="attendance-form" id="attendance-form">
+              <label for="guest-name">Họ và tên</label>
+              <input id="guest-name" name="name" type="text" placeholder="Nhập tên của bạn" autocomplete="name" required />
+
+              <fieldset>
+                <legend>Bạn sẽ tham dự chứ?</legend>
+                <label class="attendance-choice">
+                  <input type="radio" name="attendance" value="attending" checked />
+                  <span> Có, tôi sẽ tham dự</span>
+                </label>
+                <label class="attendance-choice">
+                  <input type="radio" name="attendance" value="absent" />
+                  <span> Tôi bận, rất tiếc không thể tham dự</span>
+                </label>
+              </fieldset>
+
+              <label class="attendance-guests" for="guest-count">Số người đi cùng bạn?
+                <select id="guest-count" name="guests" required>
+                  <option value="" selected disabled>Chọn số người tham dự</option>
+                  <option value="1">Chỉ mình tôi</option>
+                  <option value="2">2 người</option>
+                  <option value="3">3 người</option>
+                  <option value="4">4 người</option>
+                  <option value="5+">Từ 5 người trở lên</option>
+                </select>
+              </label>
+
+              <button class="attendance-submit" type="submit">Gửi xác nhận</button>
+              <p class="attendance-status" id="attendance-status" aria-live="polite"></p>
+            </form>
+          </div>
+        </div>
+      </section>
+
       <section class="paper-section locations-section reveal" id="locations" aria-labelledby="locations-title">
         <div class="section-inner">
           <p class="section-kicker">Địa chỉ gia đình</p>
@@ -206,189 +246,89 @@
           </div>
           <div class="gallery-carousel">
             <div class="gallery-grid" role="region" aria-label="Album ảnh cưới">
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1802.jpg?v=9df00907a106" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1802.jpg?v=9df00907a106" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 01" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1451.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1451.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 01" decoding="async" />
               <span>01 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1836.jpg?v=42f875998836" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1836.jpg?v=42f875998836" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 02" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1785.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1785.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 02" decoding="async" />
               <span>02 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2172.jpg?v=d21d6ff58473" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2172.jpg?v=d21d6ff58473" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 03" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1911.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1911.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 03" decoding="async" />
               <span>03 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1911.jpg?v=905386630592" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1911.jpg?v=905386630592" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 04" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1614.png?v=10fd00c5" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1614.png?v=10fd00c5" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 04" decoding="async" />
               <span>04 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1919.jpg?v=115132fd698f" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1919.jpg?v=115132fd698f" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 05" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1834.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1834.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 05" decoding="async" />
               <span>05 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1831.jpg?v=561e47c7465d" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1831.jpg?v=561e47c7465d" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 06" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2187.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2187.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 06" decoding="async" />
               <span>06 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1848.jpg?v=672e81d42ad8" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1848.jpg?v=672e81d42ad8" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 07" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1753.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1753.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 07" decoding="async" />
               <span>07 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1898.jpg?v=aee398000b84" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1898.jpg?v=aee398000b84" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 08" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1892.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1892.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 08" decoding="async" />
               <span>08 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1824.jpg?v=e71653e9e467" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1824.jpg?v=e71653e9e467" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 09" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1946.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1946.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 09" decoding="async" />
               <span>09 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1839.jpg?v=19f0a2f91647" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1839.jpg?v=19f0a2f91647" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 10" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1824.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1824.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 10" decoding="async" />
               <span>10 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1840.jpg?v=5b0cbc04b091" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1840.jpg?v=5b0cbc04b091" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 11" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1914.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1914.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 11" decoding="async" />
               <span>11 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1845.jpg?v=03208054f85b" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1845.jpg?v=03208054f85b" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 12" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2010.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2010.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 12" decoding="async" />
               <span>12 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1857.jpg?v=6ddc0d2e3386" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1857.jpg?v=6ddc0d2e3386" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 13" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2032.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2032.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 13" decoding="async" />
               <span>13 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1877.jpg?v=7259de1ec687" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1877.jpg?v=7259de1ec687" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 14" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2054.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2054.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 14" decoding="async" />
               <span>14 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2093.jpg?v=2c64772056ef" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2093.jpg?v=2c64772056ef" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 15" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2089.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2089.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 15" decoding="async" />
               <span>15 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1850.jpg?v=4c6ebf34d0e7" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1850.jpg?v=4c6ebf34d0e7" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 16" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2130.png" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2130.png" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 16" decoding="async" />
               <span>16 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1862.jpg?v=3a5385ef4ea2" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1862.jpg?v=3a5385ef4ea2" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 17" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1840.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1840.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 17" decoding="async" />
               <span>17 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1865.jpg?v=7b1975f6334f" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1865.jpg?v=7b1975f6334f" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 18" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1862.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1862.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 18" decoding="async" />
               <span>18 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1882.jpg?v=beff49ecad2f" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1882.jpg?v=beff49ecad2f" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 19" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1938.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1938.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 19" decoding="async" />
               <span>19 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1905.jpg?v=f45cd46cdc55" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1905.jpg?v=f45cd46cdc55" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 20" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1992.jpg" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH1992.jpg" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 20" decoding="async" />
               <span>20 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1914.jpg?v=555e1120cdef" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1914.jpg?v=555e1120cdef" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 21" decoding="async" />
+            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2231.JPG" data-caption="Thu Hương &amp; Văn Lâm">
+              <img data-src="assets/photos/album/LINH2231.JPG" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 21" decoding="async" />
               <span>21 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1918.jpg?v=ebbcc578a4af" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1918.jpg?v=ebbcc578a4af" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 22" decoding="async" />
-              <span>22 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1920.jpg?v=a3997a4e71ad" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1920.jpg?v=a3997a4e71ad" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 23" decoding="async" />
-              <span>23 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1922.jpg?v=3ee0cfd500b0" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1922.jpg?v=3ee0cfd500b0" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 24" decoding="async" />
-              <span>24 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1938.jpg?v=66a84ca094f2" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1938.jpg?v=66a84ca094f2" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 25" decoding="async" />
-              <span>25 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1946.jpg?v=290bbdbec862" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1946.jpg?v=290bbdbec862" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 26" decoding="async" />
-              <span>26 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1947.jpg?v=415c8c51afa4" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1947.jpg?v=415c8c51afa4" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 27" decoding="async" />
-              <span>27 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1972.jpg?v=eeb88d13336b" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1972.jpg?v=eeb88d13336b" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 28" decoding="async" />
-              <span>28 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1982.jpg?v=a312751a49c8" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1982.jpg?v=a312751a49c8" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 29" decoding="async" />
-              <span>29 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1992.jpg?v=13fcc4da8541" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1992.jpg?v=13fcc4da8541" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 30" decoding="async" />
-              <span>30 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2007.jpg?v=d08ed5f77ca6" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2007.jpg?v=d08ed5f77ca6" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 31" decoding="async" />
-              <span>31 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2010.jpg?v=721329428105" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2010.jpg?v=721329428105" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 32" decoding="async" />
-              <span>32 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2014.jpg?v=98fb7a95d470" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2014.jpg?v=98fb7a95d470" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 33" decoding="async" />
-              <span>33 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2020.jpg?v=0f78351e7241" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2020.jpg?v=0f78351e7241" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 34" decoding="async" />
-              <span>34 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2032.jpg?v=ca0b2f29381c" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2032.jpg?v=ca0b2f29381c" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 35" decoding="async" />
-              <span>35 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2054.jpg?v=3c6d8baf4470" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2054.jpg?v=3c6d8baf4470" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 36" decoding="async" />
-              <span>36 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2089.jpg?v=2987c49890a4" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2089.jpg?v=2987c49890a4" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 37" decoding="async" />
-              <span>37 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2183.jpg?v=b69e57c70be2" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2183.jpg?v=b69e57c70be2" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 38" decoding="async" />
-              <span>38 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2187.jpg?v=f53e0988f7cd" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2187.jpg?v=f53e0988f7cd" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 39" decoding="async" />
-              <span>39 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH2130.jpg?v=5203b1a24a93" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH2130.jpg?v=5203b1a24a93" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 40" decoding="async" />
-              <span>40 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1394.jpg?v=6c3ebca64d19" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1394.jpg?v=6c3ebca64d19" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 41" decoding="async" />
-              <span>41 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1785.jpg?v=ec0aeada3b72" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1785.jpg?v=ec0aeada3b72" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 42" decoding="async" />
-              <span>42 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1813.jpg?v=29be9be8e813" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1813.jpg?v=29be9be8e813" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 43" decoding="async" />
-              <span>43 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1876.jpg?v=d0f78262d7c8" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1876.jpg?v=d0f78262d7c8" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 44" decoding="async" />
-              <span>44 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1887.jpg?v=591fa59a2f21" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1887.jpg?v=591fa59a2f21" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 45" decoding="async" />
-              <span>45 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
-            </button>
-            <button class="gallery-card" type="button" data-lightbox="assets/photos/album/LINH1892.jpg?v=f5df751e260e" data-caption="Thu Hương &amp; Văn Lâm">
-              <img data-src="assets/photos/album/LINH1892.jpg?v=f5df751e260e" alt="Ảnh cưới Thu Hương và Văn Lâm – ảnh 46" decoding="async" />
-              <span>46 · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b></span>
             </button>
             </div>
             <button class="gallery-arrow gallery-arrow-prev" type="button" aria-label="Xem ảnh trước">←</button>
@@ -506,6 +446,6 @@
     </dialog>
 
     <audio id="wedding-audio" autoplay loop preload="auto" src="assets/audio/yes-i-do.mp3"></audio>
-    <script src="script.js?v=trimmed-yes-i-do-30s"></script>
+    <script src="script.js?v=attendance-rsvp-1"></script>
   </body>
 </html>
