@@ -214,6 +214,63 @@ giftDialog.addEventListener("close", () => {
   giftTrigger.setAttribute("aria-expanded", "false");
 });
 
+const originalPhotoExtensions = {
+  LINH1451: "png", LINH1614: "png", LINH1753: "png", LINH1785: "jpg",
+  LINH1824: "jpg", LINH1834: "png", LINH1840: "jpg", LINH1862: "jpg",
+  LINH1892: "png", LINH1911: "png", LINH1914: "jpg", LINH1938: "jpg",
+  LINH1946: "png", LINH1992: "jpg", LINH2010: "png", LINH2032: "png",
+  LINH2054: "png", LINH2089: "png", LINH2130: "png", LINH2187: "png",
+  LINH2231: "JPG"
+};
+const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1946", "LINH2231"]);
+const storyPhotoGroups = [
+  ["#invitation", ["LINH1785", "LINH1911"]],
+  [".countdown-section", ["LINH1614", "LINH1834"]],
+  ["#details", ["LINH2187", "LINH1892", "LINH1914"]],
+  ["#schedule", ["LINH2010", "LINH2032", "LINH2054"]],
+  ["#attendance", ["LINH2089", "LINH2130", "LINH1840"]],
+  ["#locations", ["LINH1862", "LINH1938", "LINH1992"]]
+];
+const storyImageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const image = entry.target;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    observer.unobserve(image);
+  });
+}, { rootMargin: "400px 0px" });
+
+storyPhotoGroups.forEach(([sectionSelector, photos], groupIndex) => {
+  const section = document.querySelector(sectionSelector);
+  if (!section) return;
+  const figure = document.createElement("figure");
+  figure.className = `story-gallery story-gallery--${photos.length}${groupIndex % 2 ? " story-gallery--reverse" : ""}`;
+  figure.setAttribute("aria-label", "Khoảnh khắc của Thu Hương và Văn Lâm");
+  photos.forEach((name, imageIndex) => {
+    const image = document.createElement("img");
+    image.dataset.src = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
+    image.alt = `Khoảnh khắc cưới của Thu Hương và Văn Lâm ${imageIndex + 1}`;
+    image.loading = "lazy";
+    image.decoding = "async";
+    figure.appendChild(image);
+    storyImageObserver.observe(image);
+  });
+  section.insertAdjacentElement("afterend", figure);
+});
+
+document.querySelectorAll(".gallery-card").forEach((card) => {
+  const name = card.dataset.lightbox.match(/(LINH\d+)/)?.[1];
+  if (!name || !featuredPhotos.has(name)) {
+    card.remove();
+    return;
+  }
+  const originalSource = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
+  card.dataset.thumbnail = `assets/photos/album_thumbs/${name}.webp`;
+  card.dataset.lightbox = originalSource;
+  card.querySelector("img").dataset.src = originalSource;
+});
+
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector(".lightbox-image");
 const lightboxCaption = document.querySelector(".lightbox-caption");
@@ -233,7 +290,7 @@ const thumbnailButtons = galleryCards.map((card, index) => {
   image.alt = "";
   image.loading = "lazy";
   image.decoding = "async";
-  image.dataset.src = card.dataset.lightbox;
+  image.dataset.src = card.dataset.thumbnail || card.dataset.lightbox;
   button.appendChild(image);
   button.addEventListener("click", () => updateLightbox(index));
   thumbnailStrip.appendChild(button);
@@ -243,6 +300,10 @@ const thumbnailObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     const image = entry.target;
+    if (!image.dataset.src) {
+      observer.unobserve(image);
+      return;
+    }
     image.src = image.dataset.src;
     delete image.dataset.src;
     observer.unobserve(image);
@@ -255,17 +316,26 @@ function refreshThumbnails() {
     button.setAttribute("aria-current", String(index === lightboxIndex));
   });
   const active = thumbnailButtons[lightboxIndex];
+  const activeImage = active.querySelector("img");
+  if (activeImage?.dataset.src) {
+    activeImage.src = activeImage.dataset.src;
+    delete activeImage.dataset.src;
+  }
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
 
-// Ảnh nổi bật chiếm bốn ô; thêm tám ảnh để mọi hàng đều đầy khi thu gọn.
-const INITIAL_VISIBLE_COUNT = 9;
+// Năm ảnh nổi bật kết lại câu chuyện ở cuối trang.
+const INITIAL_VISIBLE_COUNT = 5;
 let isGalleryExpanded = false;
 const galleryImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     const image = entry.target;
-    image.src = image.dataset.src;
+    if (!image.dataset.src) {
+      observer.unobserve(image);
+      return;
+    }
+    image.src = image.closest(".gallery-card")?.dataset.lightbox || image.dataset.src;
     delete image.dataset.src;
     observer.unobserve(image);
   });
@@ -347,11 +417,6 @@ function updateLightbox(index) {
   if (lightbox.open) refreshThumbnails();
   lightboxPrev.setAttribute("aria-label", `Xem ảnh trước: ${previousCard.dataset.caption}`);
   lightboxNext.setAttribute("aria-label", `Xem ảnh tiếp theo: ${nextCard.dataset.caption}`);
-
-  [previousCard, nextCard].forEach((nearbyCard) => {
-    const preloadImage = new Image();
-    preloadImage.src = nearbyCard.dataset.lightbox;
-  });
 }
 
 function moveLightbox(direction) {

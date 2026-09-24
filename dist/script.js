@@ -128,6 +128,63 @@ window.setInterval(updateCountdown, 1000);
 
 const giftDialog = document.querySelector("#gift-dialog");
 const giftTrigger = document.querySelector(".gift-trigger");
+const originalPhotoExtensions = {
+  LINH1451: "png", LINH1614: "png", LINH1753: "png", LINH1785: "jpg",
+  LINH1824: "jpg", LINH1834: "png", LINH1840: "jpg", LINH1862: "jpg",
+  LINH1892: "png", LINH1911: "png", LINH1914: "jpg", LINH1938: "jpg",
+  LINH1946: "png", LINH1992: "jpg", LINH2010: "png", LINH2032: "png",
+  LINH2054: "png", LINH2089: "png", LINH2130: "png", LINH2187: "png",
+  LINH2231: "JPG"
+};
+const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1946", "LINH2231"]);
+const storyPhotoGroups = [
+  ["#invitation", ["LINH1785", "LINH1911"]],
+  [".countdown-section", ["LINH1614", "LINH1834"]],
+  ["#details", ["LINH2187", "LINH1892", "LINH1914"]],
+  ["#schedule", ["LINH2010", "LINH2032", "LINH2054"]],
+  ["#attendance", ["LINH2089", "LINH2130", "LINH1840"]],
+  ["#locations", ["LINH1862", "LINH1938", "LINH1992"]]
+];
+const storyImageObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    const image = entry.target;
+    image.src = image.dataset.src;
+    delete image.dataset.src;
+    observer.unobserve(image);
+  });
+}, { rootMargin: "400px 0px" });
+
+storyPhotoGroups.forEach(([sectionSelector, photos], groupIndex) => {
+  const section = document.querySelector(sectionSelector);
+  if (!section) return;
+  const figure = document.createElement("figure");
+  figure.className = `story-gallery story-gallery--${photos.length}${groupIndex % 2 ? " story-gallery--reverse" : ""}`;
+  figure.setAttribute("aria-label", "Khoảnh khắc của Thu Hương và Văn Lâm");
+  photos.forEach((name, imageIndex) => {
+    const image = document.createElement("img");
+    image.dataset.src = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
+    image.alt = `Khoảnh khắc cưới của Thu Hương và Văn Lâm ${imageIndex + 1}`;
+    image.loading = "lazy";
+    image.decoding = "async";
+    figure.appendChild(image);
+    storyImageObserver.observe(image);
+  });
+  section.insertAdjacentElement("afterend", figure);
+});
+
+document.querySelectorAll(".gallery-card").forEach((card) => {
+  const name = card.dataset.lightbox.match(/(LINH\d+)/)?.[1];
+  if (!name || !featuredPhotos.has(name)) {
+    card.remove();
+    return;
+  }
+  const originalSource = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
+  card.dataset.thumbnail = `assets/photos/album_thumbs/${name}.webp`;
+  card.dataset.lightbox = originalSource;
+  card.querySelector("img").dataset.src = originalSource;
+});
+
 const lightbox = document.querySelector("#lightbox");
 const lightboxImage = document.querySelector(".lightbox-image");
 const lightboxCaption = document.querySelector(".lightbox-caption");
@@ -135,12 +192,10 @@ const lightboxCounter = document.querySelector(".lightbox-counter");
 const lightboxPrev = document.querySelector(".lightbox-arrow-prev");
 const lightboxNext = document.querySelector(".lightbox-arrow-next");
 const desiredGalleryImages = [
-  "linh1900.jpg", "linh1785.jpg", "linh2172.jpg", "linh1911.jpg", "linh1887.jpg", "linh1919.jpg",
-  "linh1831.jpg", "linh2187.jpg", "linh1394.jpg", "linh2183.jpg", "linh2010.jpg", "linh2020.jpg",
-  "linh2032.jpg", "linh1946.jpg", "linh1972.jpg", "linh2054.jpg", "linh2089.jpg", "linh2130.jpg",
-  "linh1892.jpg", "linh2093.jpg", "linh1862.jpg", "linh1876.jpg", "linh1824.jpg", "linh1839.jpg",
-  "linh1865.jpg", "linh1895.jpg", "linh1922.jpg", "linh1914.jpg", "linh1845.jpg", "linh1938.jpg",
-  "linh1877.jpg", "linh1857.jpg", "linh1920.jpg", "linh1882.jpg"
+  "LINH1451.webp", "LINH1785.webp", "LINH1911.webp", "LINH1614.webp", "LINH1834.webp", "LINH2187.webp",
+  "LINH1753.webp", "LINH1892.webp", "LINH1946.webp", "LINH1824.webp", "LINH1914.webp", "LINH2010.webp",
+  "LINH2032.webp", "LINH2054.webp", "LINH2089.webp", "LINH2130.webp", "LINH1840.webp", "LINH1862.webp",
+  "LINH1938.webp", "LINH1992.webp", "LINH2231.webp"
 ];
 const galleryGrid = document.querySelector(".gallery-grid");
 if (galleryGrid) {
@@ -153,12 +208,13 @@ if (galleryGrid) {
     const card = existingCards.get(name) || document.createElement("button");
     card.className = "gallery-card";
     card.type = "button";
-    card.dataset.lightbox = `assets/photos/album/${name}`;
+    card.dataset.lightbox = `assets/photos/album_optimized/${name}`;
     card.dataset.caption = "Thu Hương & Văn Lâm";
     const img = card.querySelector("img") || document.createElement("img");
-    img.dataset.src = `assets/photos/album/${name}`;
+    img.dataset.src = `assets/photos/album_thumbs/${name}`;
     img.removeAttribute("src");
     img.alt = `Ảnh cưới Thu Hương và Văn Lâm – ảnh ${String(index + 1).padStart(2, "0")}`;
+    img.loading = "lazy";
     img.decoding = "async";
     const label = card.querySelector("span") || document.createElement("span");
     label.innerHTML = `${String(index + 1).padStart(2, "0")} · <b class="couple-names couple-names-gallery">Thu Hương &amp; Văn Lâm</b>`;
@@ -179,7 +235,7 @@ const thumbnailButtons = galleryCards.map((card, index) => {
   image.alt = "";
   image.loading = "lazy";
   image.decoding = "async";
-  image.dataset.src = card.dataset.lightbox;
+  image.dataset.src = card.dataset.thumbnail || card.dataset.lightbox;
   button.appendChild(image);
   button.addEventListener("click", () => updateLightbox(index));
   thumbnailStrip.appendChild(button);
@@ -189,18 +245,18 @@ const thumbnailButtons = galleryCards.map((card, index) => {
 function refreshThumbnails() {
   thumbnailButtons.forEach((button, index) => {
     button.setAttribute("aria-current", String(index === lightboxIndex));
-    const image = button.querySelector("img");
-    if (image.dataset.src) {
-      image.src = image.dataset.src;
-      delete image.dataset.src;
-    }
   });
   const active = thumbnailButtons[lightboxIndex];
+  const activeImage = active.querySelector("img");
+  if (activeImage?.dataset.src) {
+    activeImage.src = activeImage.dataset.src;
+    delete activeImage.dataset.src;
+  }
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
 
 // Masonry Grid View - Hiển thị 8 ảnh đầu tiên, bấm "Xem thêm album" để bung toàn bộ ảnh
-const INITIAL_VISIBLE_COUNT = 8;
+const INITIAL_VISIBLE_COUNT = 5;
 let isGalleryExpanded = false;
 
 function setupMasonryGallery() {
@@ -209,7 +265,7 @@ function setupMasonryGallery() {
     if (index < INITIAL_VISIBLE_COUNT) {
       card.style.display = "";
       if (image && image.dataset.src) {
-        image.src = image.dataset.src;
+        image.src = image.closest(".gallery-card")?.dataset.lightbox || image.dataset.src;
         delete image.dataset.src;
       }
     } else {
@@ -285,11 +341,6 @@ function updateLightbox(index) {
   if (lightbox.open) refreshThumbnails();
   lightboxPrev.setAttribute("aria-label", `Xem ảnh trước: ${previousCard.dataset.caption}`);
   lightboxNext.setAttribute("aria-label", `Xem ảnh tiếp theo: ${nextCard.dataset.caption}`);
-
-  [previousCard, nextCard].forEach((nearbyCard) => {
-    const preloadImage = new Image();
-    preloadImage.src = nearbyCard.dataset.lightbox;
-  });
 }
 
 function moveLightbox(direction) {
