@@ -136,14 +136,13 @@ const originalPhotoExtensions = {
   LINH2054: "png", LINH2089: "png", LINH2130: "png", LINH2187: "png",
   LINH2231: "JPG"
 };
-const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1946", "LINH2231"]);
+const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1840", "LINH1862", "LINH1946"]);
 const storyPhotoGroups = [
-  ["#invitation", ["LINH1785", "LINH1911"]],
-  [".countdown-section", ["LINH1614", "LINH1834"]],
+  ["#invitation", ["LINH1911", "LINH1785", "LINH2089"]],
+  [".countdown-section", ["LINH1614", "LINH1834", "LINH2130"]],
   ["#details", ["LINH2187", "LINH1892", "LINH1914"]],
   ["#schedule", ["LINH2010", "LINH2032", "LINH2054"]],
-  ["#attendance", ["LINH2089", "LINH2130", "LINH1840"]],
-  ["#locations", ["LINH1862", "LINH1938", "LINH1992"]]
+  ["#locations", ["LINH1938", "LINH2231", "LINH1992"]]
 ];
 const storyImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
@@ -256,7 +255,7 @@ function refreshThumbnails() {
 }
 
 // Masonry Grid View - Hiển thị 8 ảnh đầu tiên, bấm "Xem thêm album" để bung toàn bộ ảnh
-const INITIAL_VISIBLE_COUNT = 5;
+const INITIAL_VISIBLE_COUNT = 6;
 let isGalleryExpanded = false;
 
 function setupMasonryGallery() {

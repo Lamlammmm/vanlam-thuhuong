@@ -126,46 +126,6 @@ function updateCountdown() {
 updateCountdown();
 window.setInterval(updateCountdown, 1000);
 
-const attendanceForm = document.querySelector("#attendance-form");
-if (attendanceForm) {
-  const attendanceRadios = [...attendanceForm.elements.attendance];
-  const guestCount = attendanceForm.elements.guests;
-  const guestField = attendanceForm.querySelector(".attendance-guests");
-  const attendanceStatus = document.querySelector("#attendance-status");
-
-  function updateGuestCountVisibility() {
-    const attending = attendanceForm.elements.attendance.value === "attending";
-    guestField.classList.toggle("is-hidden", !attending);
-    guestCount.required = attending;
-    guestCount.disabled = !attending;
-  }
-
-  attendanceRadios.forEach((radio) => radio.addEventListener("change", updateGuestCountVisibility));
-  updateGuestCountVisibility();
-
-  attendanceForm.addEventListener("submit", (event) => {
-    event.preventDefault();
-    if (!attendanceForm.reportValidity()) return;
-
-    const response = {
-      name: attendanceForm.elements.name.value.trim(),
-      attendance: attendanceForm.elements.attendance.value,
-      guests: guestCount.disabled ? null : guestCount.value,
-    };
-
-    try {
-      localStorage.setItem("wedding-attendance-confirmation", JSON.stringify(response));
-    } catch {
-      // Form vẫn có phản hồi khi trình duyệt chặn bộ nhớ cục bộ.
-    }
-
-    attendanceStatus.textContent = response.attendance === "attending"
-      ? `Cảm ơn ${response.name}, chúng mình rất mong được đón bạn!`
-      : `Cảm ơn ${response.name} đã phản hồi. Hẹn gặp bạn vào một dịp gần nhất nhé.`;
-    attendanceForm.querySelector(".attendance-submit").blur();
-  });
-}
-
 const giftDialog = document.querySelector("#gift-dialog");
 const giftTrigger = document.querySelector(".gift-trigger");
 const giftEnvelopes = [...giftTrigger.querySelectorAll(".gift-envelope")];
@@ -222,14 +182,13 @@ const originalPhotoExtensions = {
   LINH2054: "png", LINH2089: "png", LINH2130: "png", LINH2187: "png",
   LINH2231: "JPG"
 };
-const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1946", "LINH2231"]);
+const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1840", "LINH1862", "LINH1946"]);
 const storyPhotoGroups = [
-  ["#invitation", ["LINH1785", "LINH1911"]],
-  [".countdown-section", ["LINH1614", "LINH1834"]],
+  ["#invitation", ["LINH1911", "LINH1785", "LINH2089"]],
+  [".countdown-section", ["LINH1614", "LINH1834", "LINH2130"]],
   ["#details", ["LINH2187", "LINH1892", "LINH1914"]],
   ["#schedule", ["LINH2010", "LINH2032", "LINH2054"]],
-  ["#attendance", ["LINH2089", "LINH2130", "LINH1840"]],
-  ["#locations", ["LINH1862", "LINH1938", "LINH1992"]]
+  ["#locations", ["LINH1938", "LINH2231", "LINH1992"]]
 ];
 const storyImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
@@ -324,8 +283,8 @@ function refreshThumbnails() {
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
 
-// Năm ảnh nổi bật kết lại câu chuyện ở cuối trang.
-const INITIAL_VISIBLE_COUNT = 5;
+// Sáu ảnh nổi bật kết lại câu chuyện ở cuối trang.
+const INITIAL_VISIBLE_COUNT = 6;
 let isGalleryExpanded = false;
 const galleryImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {

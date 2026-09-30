@@ -611,7 +611,7 @@ img { display: block; max-width: 100%; }
 .story-gallery {
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
-  align-items: start;
+  align-items: stretch;
   gap: clamp(0.75rem, 2vw, 1.5rem);
   width: min(calc(100% - (var(--page-gutter) * 2)), 72rem);
   margin: clamp(2.5rem, 6vw, 5rem) auto;
@@ -622,12 +622,13 @@ img { display: block; max-width: 100%; }
   width: 100%;
   height: auto;
   border: 1px solid rgb(112 21 29 / 0.12);
+  border-radius: 14px;
   background: var(--paper);
-  box-shadow: 0 1rem 2.5rem rgb(77 24 17 / 0.1);
+  box-shadow: 0 1rem 2.5rem rgb(77 24 17 / 0.14), 0 0.25rem 0.6rem rgb(255 255 255 / 0.55) inset;
 }
 
 .story-gallery--2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-.story-gallery--reverse img:first-child { margin-top: clamp(2rem, 5vw, 5rem); }
+.story-gallery--reverse img:first-child { margin-top: 0; }
 
 
 /* Hiệu ứng cánh hoa rơi nhẹ */
@@ -694,27 +695,6 @@ img { display: block; max-width: 100%; }
 .schedule-time { position: absolute; top: 50%; left: 50%; z-index: 1; transform: translate(-50%, -50%); padding: 0.35rem 0.65rem; border: 1px solid var(--gold); border-radius: 999px; background: var(--burgundy-deep); color: var(--gold-light); box-shadow: 0 0.25rem 0.7rem rgb(34 5 8 / 0.2); font-size: 0.85rem; font-weight: 700; white-space: nowrap; }
 .schedule-event h4 { margin: 0.65rem 0 0.4rem; color: var(--burgundy); font-family: var(--serif); font-size: 1.5rem; font-weight: 500; line-height: 1.25; }
 .schedule-event p { margin: 0; color: var(--muted); font-size: 1rem; line-height: 1.6; }
-
-/* Xác nhận tham dự */
-.attendance-section { background: linear-gradient(180deg, var(--paper), #fffdf8); }
-.attendance-section .section-inner { padding-top: clamp(4rem, 8vw, 6rem); padding-bottom: clamp(4rem, 8vw, 6rem); }
-.attendance-card { width: min(100%, 32rem); margin: 0 auto; padding: clamp(1.6rem, 5vw, 2.6rem); border: 1px solid rgb(112 21 29 / 0.16); border-radius: 0.8rem; background: rgb(255 255 255 / 0.86); box-shadow: 0 1rem 2.8rem rgb(77 24 17 / 0.1); }
-.attendance-card .section-kicker { margin-bottom: 0.55rem; font-size: 0.7rem; text-align: center; }
-.attendance-card h2 { font-size: clamp(2rem, 5vw, 3.1rem); text-align: center; }
-.attendance-intro { margin: 0.85rem auto 1.75rem; color: var(--muted); font-size: 0.95rem; line-height: 1.6; text-align: center; }
-.attendance-form { display: grid; gap: 0.8rem; }
-.attendance-form > label, .attendance-form legend { color: var(--ink); font-size: 0.95rem; }
-.attendance-form input[type="text"], .attendance-form select { width: 100%; min-height: 2.85rem; margin-top: 0.38rem; padding: 0.65rem 0.8rem; border: 1px solid rgb(112 21 29 / 0.2); border-radius: 0.35rem; background: #fff; color: var(--ink); font: inherit; }
-.attendance-form input[type="text"]:focus, .attendance-form select:focus { outline: 2px solid rgb(201 162 100 / 0.55); outline-offset: 1px; border-color: var(--gold); }
-.attendance-form fieldset { display: grid; gap: 0.65rem; margin: 0.25rem 0 0; padding: 0; border: 0; }
-.attendance-form legend { margin-bottom: 0.15rem; }
-.attendance-choice { display: flex; gap: 0.55rem; align-items: center; color: var(--muted); font-size: 0.95rem; cursor: pointer; }
-.attendance-choice input { width: 1.1rem; height: 1.1rem; margin: 0; accent-color: #a50c16; }
-.attendance-guests { display: grid; }
-.attendance-guests.is-hidden { display: none; }
-.attendance-submit { min-height: 3rem; margin-top: 0.45rem; border: 1px solid #8c090f; border-radius: 0.35rem; background: #94070d; color: #fffaf2; font-family: var(--serif); font-size: 1rem; font-weight: 600; cursor: pointer; transition: background 200ms ease, transform 200ms ease; }
-.attendance-submit:hover, .attendance-submit:focus-visible { background: var(--burgundy); transform: translateY(-1px); }
-.attendance-status { min-height: 1.35rem; margin: 0; color: var(--burgundy); font-size: 0.9rem; line-height: 1.5; text-align: center; }
 
 /* Nâng cấp Hộp quà & Chi tiết ngân hàng */
 .gift-card {
@@ -1209,13 +1189,6 @@ html:has(.lightbox[open]) { overflow: hidden; }
               border-color 450ms ease;
 }
 
-/* Một ảnh nổi bật, các ảnh còn lại nằm trọn trong các hàng bằng nhau. */
-.gallery-card:first-child {
-  grid-column: span 2;
-  grid-row: span 2;
-  min-height: 0;
-}
-
 .gallery-card img {
   position: absolute;
   inset: 0;
@@ -1306,6 +1279,11 @@ html:has(.lightbox[open]) { overflow: hidden; }
 .gallery-card:hover::before {
   opacity: 1;
   transform: scale(1);
+}
+
+@media (min-width: 64.01rem) {
+  .gallery-card:nth-child(5) { grid-column: 2; }
+  .gallery-card:nth-child(6) { grid-column: 3; }
 }
 
 /* Nút xem thêm ảnh / thu gọn ảnh thanh lịch */
