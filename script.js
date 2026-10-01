@@ -181,12 +181,81 @@ const storyPhotoGroups = [
   [".countdown-section", ["LINH2130", "LINH1559", "LINH1874"]],
   ["#details", ["LINH2112", "LINH1914", "LINH1670"]]
 ];
+const fullQualityImageCache = new Map();
+
+function decodeFullQualityImage(source) {
+  if (!fullQualityImageCache.has(source)) {
+    fullQualityImageCache.set(source, new Promise((resolve, reject) => {
+      const loader = new Image();
+      loader.decoding = "async";
+      loader.addEventListener("load", async () => {
+        try {
+          await loader.decode();
+        } catch {
+          // The image is still usable when decode() is unavailable or interrupted.
+        }
+        resolve(source);
+      }, { once: true });
+      loader.addEventListener("error", (error) => {
+        fullQualityImageCache.delete(source);
+        reject(error);
+      }, { once: true });
+      loader.src = source;
+    }));
+  }
+  return fullQualityImageCache.get(source);
+}
+
+async function loadFullQualityImage(image, source = image?.dataset.src) {
+  if (!image || !source || image.dataset.loadingSource === source) return;
+  image.dataset.loadingSource = source;
+  try {
+    await decodeFullQualityImage(source);
+    if (image.dataset.loadingSource !== source) return;
+    image.src = source;
+    delete image.dataset.src;
+    delete image.dataset.loadingSource;
+    requestAnimationFrame(() => image.classList.add("is-loaded"));
+  } catch {
+    delete image.dataset.loadingSource;
+  }
+}
+
+function warmFullQualityPhotoCache() {
+  const connection = navigator.connection || navigator.mozConnection || navigator.webkitConnection;
+  if (connection?.saveData || /(^|-)2g$/.test(connection?.effectiveType || "")) return;
+  const sources = [...new Set([
+    ...storyPhotoGroups.flatMap(([, photos]) => photos),
+    ...galleryPhotos
+  ].map((name) => `assets/photos/album_optimized/${name}.webp`))];
+  let index = 0;
+  const scheduleNext = () => {
+    const run = async () => {
+      if (index >= sources.length) return;
+      try {
+        await decodeFullQualityImage(sources[index]);
+      } catch {
+        // A visible image can retry through its observer.
+      }
+      index += 1;
+      scheduleNext();
+    };
+    if ("requestIdleCallback" in window) {
+      window.requestIdleCallback(run, { timeout: 2000 });
+    } else {
+      window.setTimeout(run, 250);
+    }
+  };
+  scheduleNext();
+}
+
+window.addEventListener("load", warmFullQualityPhotoCache, { once: true });
+
 const storyImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     const image = entry.target;
-    image.src = image.dataset.src;
-    delete image.dataset.src;
+    loadFullQualityImage(image);
     observer.unobserve(image);
   });
 }, { rootMargin: "400px 0px" });
@@ -254,8 +323,7 @@ const thumbnailObserver = new IntersectionObserver((entries, observer) => {
       observer.unobserve(image);
       return;
     }
-    image.src = image.dataset.src;
-    delete image.dataset.src;
+    loadFullQualityImage(image);
     observer.unobserve(image);
   });
 }, { root: thumbnailStrip, rootMargin: "0px 200px" });
@@ -268,8 +336,7 @@ function refreshThumbnails() {
   const active = thumbnailButtons[lightboxIndex];
   const activeImage = active.querySelector("img");
   if (activeImage?.dataset.src) {
-    activeImage.src = activeImage.dataset.src;
-    delete activeImage.dataset.src;
+    loadFullQualityImage(activeImage);
   }
   thumbnailStrip.scrollTo({ left: active.offsetLeft - thumbnailStrip.offsetLeft - (thumbnailStrip.clientWidth - active.offsetWidth) / 2, behavior: "smooth" });
 }
@@ -285,8 +352,7 @@ const galleryImageObserver = new IntersectionObserver((entries, observer) => {
       observer.unobserve(image);
       return;
     }
-    image.src = image.closest(".gallery-card")?.dataset.lightbox || image.dataset.src;
-    delete image.dataset.src;
+    loadFullQualityImage(image, image.closest(".gallery-card")?.dataset.lightbox || image.dataset.src);
     observer.unobserve(image);
   });
 }, { rootMargin: "500px 0px" });
