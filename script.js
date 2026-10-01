@@ -174,21 +174,12 @@ giftDialog.addEventListener("close", () => {
   giftTrigger.setAttribute("aria-expanded", "false");
 });
 
-const originalPhotoExtensions = {
-  LINH1451: "png", LINH1614: "png", LINH1753: "png", LINH1785: "jpg",
-  LINH1824: "jpg", LINH1834: "png", LINH1840: "jpg", LINH1862: "jpg",
-  LINH1892: "png", LINH1911: "png", LINH1914: "jpg", LINH1938: "jpg",
-  LINH1946: "png", LINH1992: "jpg", LINH2010: "png", LINH2032: "png",
-  LINH2054: "png", LINH2089: "png", LINH2130: "png", LINH2187: "png",
-  LINH2231: "JPG"
-};
-const featuredPhotos = new Set(["LINH1451", "LINH1753", "LINH1824", "LINH1840", "LINH1862", "LINH1946"]);
+const galleryPhotos = ["LINH1836", "LINH2141", "LINH2156", "LINH1695", "LINH1533", "LINH1760"];
+const featuredPhotos = new Set(galleryPhotos);
 const storyPhotoGroups = [
-  ["#invitation", ["LINH1911", "LINH1785", "LINH2089"]],
-  [".countdown-section", ["LINH1614", "LINH1834", "LINH2130"]],
-  ["#details", ["LINH2187", "LINH1892", "LINH1914"]],
-  ["#schedule", ["LINH2010", "LINH2032", "LINH2054"]],
-  ["#locations", ["LINH1938", "LINH2231", "LINH1992"]]
+  ["#invitation", ["LINH1938", "LINH1598", "LINH1785"]],
+  [".countdown-section", ["LINH2130", "LINH1559", "LINH1874"]],
+  ["#details", ["LINH2112", "LINH1914", "LINH1670"]]
 ];
 const storyImageObserver = new IntersectionObserver((entries, observer) => {
   entries.forEach((entry) => {
@@ -208,7 +199,7 @@ storyPhotoGroups.forEach(([sectionSelector, photos], groupIndex) => {
   figure.setAttribute("aria-label", "Khoảnh khắc của Thu Hương và Văn Lâm");
   photos.forEach((name, imageIndex) => {
     const image = document.createElement("img");
-    image.dataset.src = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
+    image.dataset.src = `assets/photos/album_optimized/${name}.webp`;
     image.alt = `Khoảnh khắc cưới của Thu Hương và Văn Lâm ${imageIndex + 1}`;
     image.loading = "lazy";
     image.decoding = "async";
@@ -224,10 +215,10 @@ document.querySelectorAll(".gallery-card").forEach((card) => {
     card.remove();
     return;
   }
-  const originalSource = `assets/photos/album/${name}.${originalPhotoExtensions[name]}`;
-  card.dataset.thumbnail = `assets/photos/album_thumbs/${name}.webp`;
-  card.dataset.lightbox = originalSource;
-  card.querySelector("img").dataset.src = originalSource;
+  const photoSource = `assets/photos/album_optimized/${name}.webp`;
+  card.dataset.thumbnail = photoSource;
+  card.dataset.lightbox = photoSource;
+  card.querySelector("img").dataset.src = photoSource;
 });
 
 const lightbox = document.querySelector("#lightbox");
