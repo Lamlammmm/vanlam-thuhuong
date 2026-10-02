@@ -1014,11 +1014,61 @@ dialog::backdrop { background: rgb(25 2 5 / 0.78); backdrop-filter: blur(0.4rem)
 
 .reveal { opacity: 0; transform: translateY(3rem); transition: opacity 800ms ease, transform 900ms cubic-bezier(0.2, 0.8, 0.2, 1); }
 .reveal.is-visible { opacity: 1; transform: none; }
-.reveal.is-visible .section-inner > *, .reveal.is-visible .location-card, .reveal.is-visible .gallery-card { animation: rise-in 800ms both; }
-.reveal.is-visible .location-card:nth-child(2), .reveal.is-visible .gallery-card:nth-child(2) { animation-delay: 120ms; }
-.reveal.is-visible .gallery-card:nth-child(3) { animation-delay: 220ms; }
-.reveal.is-visible .gallery-carousel .gallery-card { animation: none; }
+.reveal.is-visible .section-inner > *, .reveal.is-visible .location-card { animation: rise-in 800ms both; }
+.reveal.is-visible .location-card:nth-child(2) { animation-delay: 120ms; }
+
+.photo-reveal-item { --photo-reveal-delay: 0ms; }
+.gallery-card.photo-reveal-item:not(.is-revealed),
+.story-gallery img.photo-reveal-item.is-loaded:not(.is-revealed) { opacity: 0; }
+
+@media (min-width: 48.01rem) {
+  .story-gallery .photo-reveal-item:nth-child(1),
+  .story-gallery .photo-reveal-item:nth-child(3) { --photo-reveal-delay: 300ms; }
+  .gallery-grid .photo-reveal-item:nth-child(1),
+  .gallery-grid .photo-reveal-item:nth-child(3),
+  .gallery-grid .photo-reveal-item:nth-child(4),
+  .gallery-grid .photo-reveal-item:nth-child(6) { --photo-reveal-delay: 300ms; }
+  .gallery-card.photo-reveal-item.is-revealed,
+  .story-gallery img.photo-reveal-item.is-loaded.is-revealed {
+    animation: photo-emerge 1400ms cubic-bezier(0.16, 1, 0.3, 1) var(--photo-reveal-delay) backwards;
+  }
+}
+
+@media (min-width: 64.01rem) {
+  .gallery-grid .photo-reveal-item:nth-child(3) { --photo-reveal-delay: 0ms; }
+  .gallery-grid .photo-reveal-item:nth-child(4) { --photo-reveal-delay: 300ms; }
+  .gallery-grid .photo-reveal-item:nth-child(5),
+  .gallery-grid .photo-reveal-item:nth-child(6) { --photo-reveal-delay: 150ms; }
+}
+
+@media (max-width: 48rem) {
+  .photo-reveal-item:nth-child(2) { --photo-reveal-delay: 90ms; }
+  .photo-reveal-item:nth-child(3) { --photo-reveal-delay: 180ms; }
+  .photo-reveal-item:nth-child(4) { --photo-reveal-delay: 270ms; }
+  .photo-reveal-item:nth-child(5) { --photo-reveal-delay: 360ms; }
+  .photo-reveal-item:nth-child(6) { --photo-reveal-delay: 450ms; }
+  .gallery-card.photo-reveal-item:nth-child(odd).is-revealed,
+  .story-gallery img.photo-reveal-item:nth-child(odd).is-loaded.is-revealed {
+    animation: gallery-fly-in-right 1200ms cubic-bezier(0.16, 1, 0.3, 1) var(--photo-reveal-delay) backwards;
+  }
+  .gallery-card.photo-reveal-item:nth-child(even).is-revealed,
+  .story-gallery img.photo-reveal-item:nth-child(even).is-loaded.is-revealed {
+    animation: gallery-fly-in-left 1200ms cubic-bezier(0.16, 1, 0.3, 1) var(--photo-reveal-delay) backwards;
+  }
+}
 @keyframes rise-in { from { opacity: 0; transform: translateY(1.5rem); } to { opacity: 1; transform: none; } }
+@keyframes photo-emerge {
+  from { opacity: 0.35; clip-path: inset(0 50% round 14px); }
+  to { opacity: 1; clip-path: inset(0 0 round 14px); }
+}
+@keyframes gallery-fly-in-right {
+  from { opacity: 0; transform: translateX(clamp(6rem, 18vw, 14rem)) rotate(2deg); }
+  to { opacity: 1; transform: translateX(0) rotate(0); }
+}
+@keyframes gallery-fly-in-left {
+  from { opacity: 0; transform: translateX(clamp(-14rem, -18vw, -6rem)) rotate(-2deg); }
+  to { opacity: 1; transform: translateX(0) rotate(0); }
+}
 
 @media (max-width: 48rem) {
   :root { --page-gutter: clamp(1rem, 5vw, 1.5rem); }
@@ -1087,6 +1137,7 @@ dialog::backdrop { background: rgb(25 2 5 / 0.78); backdrop-filter: blur(0.4rem)
   html { scroll-behavior: auto; }
   *, *::before, *::after { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
   .reveal { opacity: 1; transform: none; }
+  .photo-reveal-item { animation: none !important; opacity: 1 !important; filter: none !important; transform: none !important; }
   .opening-particles { display: none; }
 }
 

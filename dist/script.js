@@ -109,7 +109,7 @@ window.addEventListener("scroll", updateActiveLink, { passive: true });
 window.addEventListener("resize", updateActiveLink);
 updateActiveLink();
 
-const countdownTarget = new Date("2026-10-18T00:00:00+07:00").getTime();
+const countdownTarget = new Date("2026-10-17T07:00:00+07:00").getTime();
 function updateCountdown() {
   const distance = Math.max(0, countdownTarget - Date.now());
   const values = {
@@ -214,6 +214,14 @@ const storyImageObserver = new IntersectionObserver((entries, observer) => {
   });
 }, { rootMargin: "400px 0px" });
 
+const photoRevealObserver = new IntersectionObserver((entries, observer) => {
+  entries.forEach((entry) => {
+    if (!entry.isIntersecting) return;
+    entry.target.classList.add("is-revealed");
+    observer.unobserve(entry.target);
+  });
+}, { threshold: 0.16, rootMargin: "0px 0px -6%" });
+
 storyPhotoGroups.forEach(([sectionSelector, photos], groupIndex) => {
   const section = document.querySelector(sectionSelector);
   if (!section) return;
@@ -226,8 +234,10 @@ storyPhotoGroups.forEach(([sectionSelector, photos], groupIndex) => {
     image.alt = `Khoảnh khắc cưới của Thu Hương và Văn Lâm ${imageIndex + 1}`;
     image.loading = "lazy";
     image.decoding = "async";
+    image.classList.add("photo-reveal-item");
     figure.appendChild(image);
     storyImageObserver.observe(image);
+    photoRevealObserver.observe(image);
   });
   section.insertAdjacentElement("afterend", figure);
 });
@@ -277,6 +287,10 @@ if (galleryGrid) {
   });
 }
 const galleryCards = [...document.querySelectorAll(".gallery-card")];
+galleryCards.forEach((card) => {
+  card.classList.add("photo-reveal-item");
+  photoRevealObserver.observe(card);
+});
 let lightboxIndex = 0;
 let lightboxTouchStart = null;
 const thumbnailStrip = document.querySelector(".lightbox-thumbnails");
