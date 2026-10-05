@@ -109,7 +109,7 @@ window.addEventListener("scroll", updateActiveLink, { passive: true });
 window.addEventListener("resize", updateActiveLink);
 updateActiveLink();
 
-const countdownTarget = new Date("2026-10-17T07:00:00+07:00").getTime();
+const countdownTarget = new Date("2026-10-18T14:00:00+07:00").getTime();
 function updateCountdown() {
   const distance = Math.max(0, countdownTarget - Date.now());
   const values = {
